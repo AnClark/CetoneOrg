@@ -66,24 +66,24 @@ CO::~CO()
 
 VstInt32 CO::getVendorVersion ()
 {
-	return VERSION_NUMBER; 
+	return getVersion(); 
 }
 
 bool CO::getEffectName(char* name)
 {
-	vst_strncpy(name, EFFECT_NAME, kVstMaxEffectNameLen);
+	vst_strncpy(name, DISTRHO_PLUGIN_NAME, kVstMaxEffectNameLen);
 	return true;
 }
 
 bool CO::getVendorString(char* text)
 {
-	vst_strncpy(text, VENDOR_NAME, kVstMaxVendorStrLen);
+	vst_strncpy(text, DISTRHO_PLUGIN_BRAND, kVstMaxVendorStrLen);
 	return true;
 }
 
 bool CO::getProductString(char* text)
 {
-	vst_strncpy(text, PRODUCT_NAME, kVstMaxProductStrLen);
+	vst_strncpy(text, DISTRHO_PLUGIN_NAME, kVstMaxProductStrLen);
 	return true;
 }
 
@@ -109,19 +109,6 @@ void CO::setBlockSize(VstInt32 blockSize)
 
 VstInt32 CO::processEvents(const DISTRHO::MidiEvent* events, uint32_t eventCount)
 {
-#if 0
-	for (VstInt32 i = 0; i < events->numEvents; i++)
-	{
-		if ((events->events[i])->type != kVstMidiType)
-			continue;
-
-		VstMidiEvent* _event = (VstMidiEvent*)events->events[i];
-		char* midiData = _event->midiData;
-		
-		this->mStack->Push(midiData[0] & 0xff, midiData[1] & 0x7f, midiData[2] & 0x7f, _event->deltaFrames);
-	}
-	return 1;
-#else
 	for (VstInt32 i = 0; i < eventCount; i++) {
 		const DISTRHO::MidiEvent& _event = events[i];
 
@@ -129,7 +116,6 @@ VstInt32 CO::processEvents(const DISTRHO::MidiEvent* events, uint32_t eventCount
 		this->mStack->Push(midiData[0], midiData[1] & 0x7f, midiData[2] & 0x7f, _event.frame);
 	}
 	return 1;
-#endif
 }
 
 void CO::HandleMidi(int p0, int p1, int p2)

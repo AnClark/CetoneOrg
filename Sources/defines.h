@@ -18,12 +18,7 @@
 #define SINE_SIZE 2048
 #define SINE_SIZEf 2048.0f
 
-#define EFFECT_NAME "CetoneOrg"
-#define CLASS_NAME "CetoneOrg"
-#define VENDOR_NAME "Neotec Software"
-#define PRODUCT_NAME "CetoneOrg"
-#define VERSION_NUMBER 5
-#define REAL_VERSION 0x006000
+#define REAL_VERSION 0x006000	// For VST 2.4 program version control
 
 typedef struct
 {
