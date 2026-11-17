@@ -1,11 +1,6 @@
 #include "Synth.h"
 #include "data.h"
-#ifdef __APPLE__	// macOS does not provide <malloc.h>. malloc() is defined in <stdlib.h>.
-#include <stdlib.h>
-#else
-#include <malloc.h>
-#endif
-#include <memory.h>
+
 #include <math.h>
 
 Synth::Synth()
@@ -23,8 +18,6 @@ Synth::Synth()
 	this->isChorus = 0;
 	this->isReverb = 0;
 	this->iBlockSize = 0;
-	this->fLeft = this->fRight = this->mixBuf = this->lfo1 = this->lfo2 = 0;
-	this->vibrato = 0;
 	this->VibDepth = 0.0f;
 	this->PanDepth = 0.0f;
 	this->Chorus_dry = 1.0f;
@@ -54,13 +47,6 @@ Synth::~Synth()
 	delete this->_LFO;
 	delete this->_Chorus;
 	delete this->_Reverb;
-
-	if(this->fLeft) free(this->fLeft);
-	if(this->fRight) free(this->fRight);
-	if(this->mixBuf) free(this->mixBuf);
-	if(this->lfo1) free(this->lfo1);
-	if(this->lfo2) free(this->lfo2);
-	if(this->vibrato) free(this->vibrato);
 }
 
 void Synth::setSampleRate(float fs)
@@ -89,31 +75,20 @@ void Synth::setBlockSize(int size)
 {
 	if(size > this->iBlockSize)
 	{
-		if(this->fLeft != 0)
-		{
-			this->fLeft = (float*)realloc(this->fLeft, sizeof(float) * size);
-			this->fRight = (float*)realloc(this->fLeft, sizeof(float) * size);
-			this->mixBuf = (float*)realloc(this->mixBuf, sizeof(float) * size);
-			this->lfo1 = (float*)realloc(this->lfo1, sizeof(float) * size);
-			this->lfo2 = (float*)realloc(this->lfo2, sizeof(float) * size);
-			this->vibrato = (int*)realloc(this->vibrato, sizeof(int) * size);
-		}
-		else
-		{
-			this->fLeft = (float*)malloc(sizeof(float) * size);
-			this->fRight = (float*)malloc(sizeof(float) * size);
-			this->mixBuf = (float*)malloc(sizeof(float) * size);
-			this->lfo1 = (float*)malloc(sizeof(float) * size);
-			this->lfo2 = (float*)malloc(sizeof(float) * size);
-			this->vibrato = (int*)malloc(sizeof(int) * size);
-		}
+		this->fLeft.resize(size);
+		this->fRight.resize(size);
+		this->mixBuf.resize(size);
+		this->lfo1.resize(size);
+		this->lfo2.resize(size);
+		this->vibrato.resize(size);
+
 		this->iBlockSize = size;
 	}
 }
 
 void Synth::InitRender()
 {
-	memset(this->mixBuf, 0, this->iBlockSize * sizeof(float));
+	std::fill(mixBuf.begin(), mixBuf.end(), 0.0f);
 	this->iFramePos = 0;
 }
 
@@ -129,10 +104,10 @@ void Synth::FinishRender(int samples)
 	}
 
 	if(this->isChorus)
-		this->_Chorus->Render(this->fLeft, this->fRight, samples, this->Chorus_dry, this->Chorus_wet);
+		this->_Chorus->Render(this->fLeft.data(), this->fRight.data(), samples, this->Chorus_dry, this->Chorus_wet);
 
 	if(this->isReverb)
-		this->_Reverb->Render(this->fLeft, this->fRight, samples);
+		this->_Reverb->Render(this->fLeft.data(), this->fRight.data(), samples);
 
 	for(i = 0; i < samples; i++)
 	{
@@ -186,10 +161,10 @@ void Synth::NoteOff(int note)
 void Synth::Render(int frames)
 {
 	int i;
-	float* l = this->mixBuf + this->iFramePos;
-	float* l1 = this->lfo1 + this->iFramePos;
-	float* l2 = this->lfo2 + this->iFramePos;
-	int* vib = this->vibrato + this->iFramePos;
+	float* l = this->mixBuf.data() + this->iFramePos;
+	float* l1 = this->lfo1.data() + this->iFramePos;
+	float* l2 = this->lfo2.data() + this->iFramePos;
+	int* vib = this->vibrato.data() + this->iFramePos;
 
 	this->_LFO->Render(l1, l2, frames);
 

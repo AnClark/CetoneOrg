@@ -7,6 +7,8 @@
 #include "chorus.h"
 #include "reverb.h"
 
+#include <vector>
+
 class Synth
 {
 public:
@@ -166,8 +168,8 @@ public:
 		this->OutVol = v * v * 4.0f;
 	}
 
-	float *fLeft;
-	float *fRight;
+	std::vector<float> fLeft;
+	std::vector<float> fRight;
 
 	float volumes[9];
 	float Volume;
@@ -176,10 +178,10 @@ public:
 private:
 	ToneWheel *Wheels[89];
 	float FS;
-	float *mixBuf;
-	float *lfo1;
-	float *lfo2;
-	int *vibrato;
+	std::vector<float> mixBuf;
+	std::vector<float> lfo1;
+	std::vector<float> lfo2;
+	std::vector<int> vibrato;
 	LFO *_LFO;
 	Chorus *_Chorus;
 	Reverb *_Reverb;
