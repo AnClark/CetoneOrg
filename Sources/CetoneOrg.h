@@ -96,7 +96,7 @@ public:
 	void activate() override;
 	void run(const float** inputs, float** outputs, uint32_t frames, const MidiEvent* midiEvents, uint32_t midiEventCount) override;
 
-	void bufferSizeChanged(int newBufferSize);
+	void bufferSizeChanged(uint32_t newBufferSize) override;
 	void sampleRateChanged(double newSampleRate) override;
 
 	// ---------------------------------------

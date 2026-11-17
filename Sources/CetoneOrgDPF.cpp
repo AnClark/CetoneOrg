@@ -43,7 +43,7 @@ void CO::sampleRateChanged(double newSampleRate)
 	this->setSampleRate(newSampleRate);
 }
 
-void CO::bufferSizeChanged(int newBufferSize)
+void CO::bufferSizeChanged(uint32_t newBufferSize)
 {
 	this->setBlockSize(newBufferSize);
 }
