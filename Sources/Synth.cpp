@@ -73,7 +73,7 @@ void Synth::setSampleRate(float fs)
 
 void Synth::setBlockSize(int size)
 {
-	if(size > this->iBlockSize)
+	if(size != this->iBlockSize)
 	{
 		this->fLeft.resize(size);
 		this->fRight.resize(size);
