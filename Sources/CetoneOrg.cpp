@@ -305,7 +305,7 @@ void CO::setParameter(VstInt32 index, float val)
 		break;
 	case pChDelayR:
 		this->_prg[this->curProgram].c_delayr = TOINT(val, 127);
-		this->_Synth->setChorusDelayL(this->_prg[this->curProgram].c_delayr);
+		this->_Synth->setChorusDelayR(this->_prg[this->curProgram].c_delayr);
 		break;
 	case pChDepth:
 		this->_prg[this->curProgram].c_depth = TOINT(val, 127);
