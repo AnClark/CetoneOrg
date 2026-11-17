@@ -8,6 +8,12 @@ project (CetoneOrg
 # Explicitily specify C++ standard to prevent build error on Github CI - macOS build
 set (CMAKE_CXX_STANDARD 17)
 
+# Build options
+option (CETONE_BUILD_JACK_STANDALONE "Build JACK standalone version" OFF)
+if (CETONE_BUILD_JACK_STANDALONE)
+    set (TARGET_JACK jack)
+endif ()
+
 add_subdirectory (DPF)
 
 include_directories (
@@ -16,7 +22,7 @@ include_directories (
 )
 
 dpf_add_plugin (${PROJECT_NAME}
-    TARGETS vst2 vst3 lv2 clap jack
+    TARGETS vst2 vst3 lv2 clap ${TARGET_JACK}
     FILES_DSP
         Sources/CetoneOrg.cpp
         Sources/CetoneOrgDPF.cpp
