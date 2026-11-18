@@ -5,8 +5,6 @@
 #define RANDa 1664525
 #define RANDc 1013904223
 
-int g_all_sizes[4] = {556, 441, 341, 225};
-int g_comb_sizes[8] = {1116, 1188, 1277, 1356, 1422, 1491, 1557, 1617};
 float g_sine[SINE_SIZE * 3 * 128];
 GENERATOR g_generators[61];
 
