@@ -2,12 +2,7 @@
 
 #include "defines.h"
 #include "statics.h"
-#ifdef __APPLE__	// macOS does not provide <malloc.h>. malloc() is defined in <stdlib.h>.
-#include <stdlib.h>
-#else
-#include <malloc.h>
-#endif
-#include <stdlib.h>
+#include <vector>
 #include <memory.h>
 #include <math.h>
 
@@ -25,7 +20,6 @@ public:
 	{
 		this->FS = 0.0f;
 		this->Size = 0;
-		this->bufl = this->bufr = 0;
 		this->lfoPos.int32 = this->lfoStep.int32 = 0;
 		this->Position = 0;
 		this->params[0] = 18;
@@ -40,16 +34,14 @@ public:
 
 	~Chorus()
 	{
-		if(this->bufl) free(this->bufl);
-		if(this->bufr) free(this->bufr);
 	}
 
 	void Reset()
 	{
 		this->Position = 0;
 		this->lfoPos.int32 = 0;
-		memset(this->bufl, 0, this->Size * sizeof(float));
-		memset(this->bufr, 0, this->Size * sizeof(float));
+		std::fill(this->bufl.begin(), this->bufl.end(), 0.0f);
+		std::fill(this->bufr.begin(), this->bufr.end(), 0.0f);
 	}
 
 	void setDelayL(int val)
@@ -92,18 +84,11 @@ public:
 		{
 			this->FS = fs;
 			this->Size = size;
-			if(this->bufl != 0)
-			{
-				this->bufl = (float*)realloc(this->bufl, size * sizeof(float));
-				this->bufr = (float*)realloc(this->bufr, size * sizeof(float));
-			}
-			else
-			{
-				this->bufl = (float*)malloc(size * sizeof(float));
-				this->bufr = (float*)malloc(size * sizeof(float));
-			}
-			memset(this->bufl, 0, size * sizeof(float));
-			memset(this->bufr, 0, size * sizeof(float));
+			this->bufl.resize(size);
+			this->bufr.resize(size);
+
+			std::fill(this->bufl.begin(), this->bufl.end(), 0.0f);
+			std::fill(this->bufr.begin(), this->bufr.end(), 0.0f);
 
 			this->setDelayL(this->params[0]);
 			this->setDelayR(this->params[1]);
@@ -169,8 +154,8 @@ private:
 	float FS;
 	int Size;
 	int Position;
-	float* bufl;
-	float *bufr;
+	std::vector<float> bufl;
+	std::vector<float> bufr;
 	float DelayL, DelayR;
 	float Depth;
 	float Feedback;
