@@ -6,7 +6,8 @@
 class LFO
 {
 public:
-	LFO()
+	LFO(GlobalStatics *_globalStaticsInstance)
+		: globalStatics(_globalStaticsInstance)
 	{
 		this->Speed = 10.0f;
 		this->Pos.int32 = this->Step.int32 = 0;
@@ -39,14 +40,16 @@ public:
 		int i;
 		for(i = 0; i < samples; i++)
 		{
-			buf0[i] = g_sine[this->Pos.fixed.index];
-			buf1[i] = g_sine[(this->Pos.fixed.index + this->Phase) & (SINE_SIZE-1)];
+			buf0[i] = globalStatics->sineTable[this->Pos.fixed.index];
+			buf1[i] = globalStatics->sineTable[(this->Pos.fixed.index + this->Phase) & (SINE_SIZE-1)];
 			this->Pos.int32 += this->Step.int32;
 			this->Pos.fixed.index &= SINE_SIZE - 1;
 		}
 	}
 
 private:
+	GlobalStatics *globalStatics;
+
 	float FS;
 	float Speed;
 	sSTEP Pos;

@@ -147,4 +147,6 @@ private:
 	char		path[512];
 	char		tempname[512];
 	int			curProgram;	// VST 2.4 SDK variable
+
+	GlobalStatics globalStatics;
 };

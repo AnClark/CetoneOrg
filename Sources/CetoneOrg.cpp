@@ -22,7 +22,7 @@ CO::CO()
 	int i;
 
 	this->mStack = new MidiStack();
-	this->_Synth = new Synth();
+	this->_Synth = new Synth(&this->globalStatics);
 
 	cdelta = 0;
 
@@ -96,7 +96,7 @@ VstInt32 CO::canDo(char *text)
 
 void CO::setSampleRate(float sampleRate)
 {
-	initStatics(sampleRate);
+	globalStatics.initStatics(sampleRate);
 	this->_Synth->setSampleRate(sampleRate);
 	//AudioEffectX::setSampleRate(sampleRate);
 }

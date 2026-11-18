@@ -2,23 +2,7 @@
 #include "statics.h"
 #include <math.h>
 
-#define RANDa 1664525
-#define RANDc 1013904223
-
-float g_sine[SINE_SIZE * 3 * 128];
-GENERATOR g_generators[61];
-
-uint32_t _RND;
-
-static float g_sampleRate = 0.0f;
-
-int irand()
-{
-	_RND = (_RND * RANDa) + RANDc;
-	return _RND >> 16;
-}
-
-void initStatics(float fs)
+void GlobalStatics::initStatics(float fs)
 {
 	int i, n, m;
 	float sine[SINE_SIZE];
@@ -26,10 +10,10 @@ void initStatics(float fs)
 	float tri[SINE_SIZE];
 	int offs[9] = { -12, -5, 0, 12, 19, 24, 28, 31, 36 };
 
-	if(g_sampleRate == fs)
+	if(sampleRate == fs)
 		return;
 
-	g_sampleRate = fs;
+	sampleRate = fs;
 
 	for(i = 0; i < 61; i++)
 	{
@@ -38,7 +22,7 @@ void initStatics(float fs)
 			int v = i + 12 + offs[n];
 			while(v > 88)
 				v -= 12;
-			g_generators[i].offset[n] = v;
+			generators[i].offset[n] = v;
 		}
 	}
 
@@ -89,7 +73,7 @@ void initStatics(float fs)
 	{
 		float mix1 = (float)i / 127.0f;
 		float mix0 = 1.0f - mix1;
-		float *ptr = g_sine + i * SINE_SIZE * 3;
+		float *ptr = sineTable + i * SINE_SIZE * 3;
 
 		for(n = 0; n < SINE_SIZE; n++)
 		{

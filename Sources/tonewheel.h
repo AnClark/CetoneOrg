@@ -1,7 +1,17 @@
 #pragma once
 
 #include "defines.h"
-#include "statics.h"
+#include "irand.h"
+
+inline float spline(float t, float* ps)
+{
+    return (
+		(((-t + 3.0f) * t - 3.0f) * t + 1.0f) * ps[0]
+		+ (((3.0f * t - 6.0f) * t) * t + 4.0f) * ps[1]
+		+ (((-3.0f * t + 3.0f) * t + 3.0f) * t + 1.0f) * ps[2]
+		+ (t * t * t) * ps[3]
+		) * (1.0f / 6.0f);
+}
 
 class ToneWheel
 {
@@ -51,7 +61,7 @@ public:
 
 		if(this->Volume == 0.0f)
 		{
-			this->Index.fixed.index = irand() & (SINE_SIZE - 1);
+			this->Index.fixed.index = iRand.irand() & (SINE_SIZE - 1);
 			this->Delay = delay;
 		}
 		else
@@ -141,4 +151,6 @@ private:
 	int Envelope;
 	sSTEP Step;
 	sSTEP Index;
+
+	IRand iRand;
 };

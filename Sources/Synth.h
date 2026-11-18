@@ -12,7 +12,7 @@
 class Synth
 {
 public:
-	Synth();
+	Synth(GlobalStatics *_globalStaticsInstance);
 	~Synth();
 	void NoteOn(int note, int vel);
 	void NoteOff(int note);
@@ -44,7 +44,7 @@ public:
 	{
 		int i;
 		for(i = 0; i < 89; i++)
-			this->Wheels[i]->setWave(g_sine + val * SINE_SIZE * 3 + SINE_SIZE);
+			this->Wheels[i]->setWave(globalStatics->sineTable + val * SINE_SIZE * 3 + SINE_SIZE);
 	}
 
 	void setLfoSpeed(int val)
@@ -176,6 +176,8 @@ public:
 	float VibDepth;
 	float PanDepth;
 private:
+	GlobalStatics *globalStatics { nullptr };
+
 	ToneWheel *Wheels[89];
 	float FS;
 	std::vector<float> mixBuf;

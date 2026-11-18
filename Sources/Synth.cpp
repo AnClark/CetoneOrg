@@ -3,16 +3,17 @@
 
 #include <math.h>
 
-Synth::Synth()
+Synth::Synth(GlobalStatics *_globalStaticsInstance)
+	: globalStatics(_globalStaticsInstance)
 {
 	int i;
 	for(i = 0; i < 89; i++)
 	{
 		this->Wheels[i] = new ToneWheel(g_rotors[i * 3], g_rotors[i * 3 + 1], g_rotors[i * 3 + 2]);
-		this->Wheels[i]->setWave(g_sine + 127 * SINE_SIZE * 3 + SINE_SIZE);
+		this->Wheels[i]->setWave(globalStatics->sineTable + 127 * SINE_SIZE * 3 + SINE_SIZE);
 	}
 
-	this->_LFO = new LFO();
+	this->_LFO = new LFO(this->globalStatics);
 	this->_Chorus = new Chorus();
 	this->_Reverb = new Reverb();
 	this->isChorus = 0;
@@ -148,14 +149,14 @@ void Synth::NoteOn(int note, int vel)
 	int i;
 	float v = ((float)(127 - vel) * 0.00003f + 0.00008f) * this->FS;
 	for(i = 0; i < 9; i++)
-		this->Wheels[g_generators[note].offset[i]]->NoteOn(note, this->volumes[i], truncate(v * (float)i));
+		this->Wheels[globalStatics->generators[note].offset[i]]->NoteOn(note, this->volumes[i], truncate(v * (float)i));
 }
 
 void Synth::NoteOff(int note)
 {
 	int i;
 	for(i = 0; i < 9; i++)
-		this->Wheels[g_generators[note].offset[i]]->NoteOff(note);
+		this->Wheels[globalStatics->generators[note].offset[i]]->NoteOff(note);
 }
 
 void Synth::Render(int frames)
