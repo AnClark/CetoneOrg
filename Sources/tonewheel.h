@@ -16,7 +16,8 @@ inline float spline(float t, float* ps)
 class ToneWheel
 {
 public:
-	ToneWheel(int mul, int f0, int f1)
+	ToneWheel(int mul, int f0, int f1, IRand *_rngInstance)
+		: rngInstance(_rngInstance)
 	{
 		int i;
 		this->Frequency = (float)mul * (20.0f / (float)f1) * (float)f0;	
@@ -61,7 +62,7 @@ public:
 
 		if(this->Volume == 0.0f)
 		{
-			this->Index.fixed.index = iRand.irand() & (SINE_SIZE - 1);
+			this->Index.fixed.index = rngInstance->irand() & (SINE_SIZE - 1);
 			this->Delay = delay;
 		}
 		else
@@ -152,5 +153,5 @@ private:
 	sSTEP Step;
 	sSTEP Index;
 
-	IRand iRand;
+	IRand *rngInstance;
 };

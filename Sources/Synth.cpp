@@ -9,7 +9,7 @@ Synth::Synth(GlobalStatics *_globalStaticsInstance)
 	int i;
 	for(i = 0; i < 89; i++)
 	{
-		this->Wheels[i] = new ToneWheel(g_rotors[i * 3], g_rotors[i * 3 + 1], g_rotors[i * 3 + 2]);
+		this->Wheels[i] = new ToneWheel(g_rotors[i * 3], g_rotors[i * 3 + 1], g_rotors[i * 3 + 2], &this->wheelsRNG);
 		this->Wheels[i]->setWave(globalStatics->sineTable + 127 * SINE_SIZE * 3 + SINE_SIZE);
 	}
 

@@ -179,6 +179,7 @@ private:
 	GlobalStatics *globalStatics { nullptr };
 
 	ToneWheel *Wheels[89];
+	IRand wheelsRNG;	// RNG shared among all wheels
 	float FS;
 	std::vector<float> mixBuf;
 	std::vector<float> lfo1;
