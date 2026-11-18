@@ -33,7 +33,10 @@ void GlobalStatics::initStatics(float fs)
 	}
 
 	int harms = truncate((fs * 0.49f) / 5273.6f);
-	float tharm = (PI * 0.5f) / (float)harms;
+	// Guard: fs < ~10762.45 Hz makes harms == 0 (no harmonic fits below
+	// Nyquist). Skip the window-width computation to avoid 0-division;
+	// the loop below never runs in that case, so behavior is unchanged.
+	float tharm = harms > 0 ? (PI * 0.5f) / (float)harms : 0.0f;
 
 	float sign = -1.f;
     for (n = 0; n < harms; n++)
