@@ -1,6 +1,6 @@
 #pragma once
 
-int g_rotors[267] = 
+static constexpr int g_rotors[267] = 
 {
 2,85,104,
 2,71,82,
