@@ -8,7 +8,7 @@ void GlobalStatics::initStatics(float fs)
 	float sine[SINE_SIZE];
 	float para[SINE_SIZE];
 	float tri[SINE_SIZE];
-	int offs[9] = { -12, -5, 0, 12, 19, 24, 28, 31, 36 };
+	constexpr int offs[9] = { -12, -5, 0, 12, 19, 24, 28, 31, 36 };
 
 	if(sampleRate == fs)
 		return;
