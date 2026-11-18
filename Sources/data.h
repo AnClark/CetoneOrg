@@ -91,3 +91,6 @@ static constexpr int g_rotors[267] =
 128,134,73,
 128,105,54,
 128,103,50};
+
+static constexpr int g_all_sizes[4] = {556, 441, 341, 225};
+static constexpr int g_comb_sizes[8] = {1116, 1188, 1277, 1356, 1422, 1491, 1557, 1617};

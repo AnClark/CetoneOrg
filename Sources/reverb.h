@@ -1,6 +1,6 @@
 #pragma once
 #include "defines.h"
-#include "statics.h"
+#include "data.h"
 #include <memory.h>
 #include <math.h>
 
