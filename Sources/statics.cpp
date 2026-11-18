@@ -10,6 +10,15 @@ void GlobalStatics::initStatics(float fs)
 	float tri[SINE_SIZE];
 	constexpr int offs[9] = { -12, -5, 0, 12, 19, 24, 28, 31, 36 };
 
+	// Validate input before touching any state. sampleRate doubles as the
+	// "already initialized" sentinel (starts at 0); valid rates are always
+	// > 0, so a valid value can never collide with it. Non-finite values
+	// would poison the guard (NaN never compares equal -> rebuild on every
+	// call) and truncate(+inf) saturates to INT_MAX, turning the harmonic
+	// loop below into a ~2e9-iteration hang.
+	if(!isfinite(fs) || fs <= 0.0f)
+		return;
+
 	if(sampleRate == fs)
 		return;
 

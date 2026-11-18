@@ -96,6 +96,13 @@ VstInt32 CO::canDo(char *text)
 
 void CO::setSampleRate(float sampleRate)
 {
+	// DPF only debug-asserts rates; release builds pass host values
+	// straight through. Reject garbage here so no DSP module ever sees
+	// fs <= 0 or non-finite values (chorus/reverb take % fs -> SIGFPE,
+	// tone wheels divide by fs, filter coeffs would become NaN).
+	if(!std::isfinite(sampleRate) || sampleRate <= 0.0f)
+		return;
+
 	globalStatics.initStatics(sampleRate);
 	this->_Synth->setSampleRate(sampleRate);
 	//AudioEffectX::setSampleRate(sampleRate);
