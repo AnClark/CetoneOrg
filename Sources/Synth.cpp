@@ -18,6 +18,8 @@ Synth::Synth(GlobalStatics *_globalStaticsInstance)
 	this->_Reverb = new Reverb();
 	this->isChorus = 0;
 	this->isReverb = 0;
+	this->chorusOn = true;
+	this->reverbOn = true;
 	this->iBlockSize = 0;
 	this->VibDepth = 0.0f;
 	this->PanDepth = 0.0f;
@@ -104,10 +106,10 @@ void Synth::FinishRender(int samples)
 		this->fRight[i] = v * sqrtf(pan);
 	}
 
-	if(this->isChorus)
+	if(this->chorusOn && this->isChorus)
 		this->_Chorus->Render(this->fLeft.data(), this->fRight.data(), samples, this->Chorus_dry, this->Chorus_wet);
 
-	if(this->isReverb)
+	if(this->reverbOn && this->isReverb)
 		this->_Reverb->Render(this->fLeft.data(), this->fRight.data(), samples);
 
 	for(i = 0; i < samples; i++)

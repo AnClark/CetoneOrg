@@ -49,6 +49,7 @@ enum kParams
 	pChDelayL, pChDelayR, pChDepth, pChSpeed, pChFeedback, pChMix,
 	pRevDamp, pRevRoom, pRevWidth, pRevWet, pRevDry,
 	pOutVol,
+	pChSwitch, pRevSwitch,
 
 	pNumParameters
 };
@@ -80,4 +81,6 @@ typedef struct
 	UINT8 outvol;
 	UINT8 c_feedback;
 	UINT8 pad[6];
+	bool c_switch;
+	bool r_switch;
 } PROGRAM;

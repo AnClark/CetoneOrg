@@ -9,6 +9,17 @@ void CO::initParameter(uint32_t index, Parameter& parameter)
 	parameter.ranges.max = 1.0f;
 	parameter.ranges.def = getParameter(index);
 
+	// For switches, set them to boolean type
+	switch (index)
+	{
+		case pChSwitch:
+		case pRevSwitch:
+			parameter.hints |= kParameterIsBoolean;
+			break;
+		default:
+			break;
+	}
+
 	// Must set parameter.symbol, this is the unique ID of each parameter.
 	// If not set, you can neither save presets nor reset to factory default, in VST3 and CLAP!
 	char buff[256];
