@@ -41,6 +41,7 @@ add_subdirectory (DPF)
 include_directories (
     Sources/
     .
+    Widgets/dpf-imgui
     ${PROJECT_BINARY_DIR}
 )
 
@@ -51,11 +52,9 @@ dpf_add_plugin (${PROJECT_NAME}
         Sources/CetoneOrgDPF.cpp
         Sources/statics.cpp
         Sources/Synth.cpp
-    #FILES_UI
-    #    Sources/CetoneUI.cpp
-    #    Sources/CetoneUIHelper.cpp
-    #    Images/CetoneArtwork.cpp
-    #    Fonts/CetoneFonts.cpp
+    FILES_UI
+        Sources/CetoneUI.cpp
+        Widgets/dpf-imgui/DearImGui.cpp
 )
 
 # CPack stuff
