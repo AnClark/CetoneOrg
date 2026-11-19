@@ -354,6 +354,14 @@ void CO::setParameter(VstInt32 index, float val)
 		this->_prg[this->curProgram].outvol = TOINT(val, 127);
 		this->_Synth->setOutVol(this->_prg[this->curProgram].outvol);
 		break;
+	case pChSwitch:
+		this->_prg[this->curProgram].c_switch = val > 0.0f ? true : false;
+		this->_Synth->setChorusOn(this->_prg[this->curProgram].c_switch);
+		break;
+	case pRevSwitch:
+		this->_prg[this->curProgram].r_switch = val > 0.0f ? true : false;
+		this->_Synth->setRevOn(this->_prg[this->curProgram].r_switch);
+		break;
 	}
 }
 
@@ -390,6 +398,8 @@ float CO::getParameter(VstInt32 index) const
 	case pRevWet:	return FROMINT(this->_prg[this->curProgram].r_wet, 127);
 	case pRevDry:	return FROMINT(this->_prg[this->curProgram].r_dry, 127);
 	case pOutVol:	return FROMINT(this->_prg[this->curProgram].outvol, 127);
+	case pChSwitch:	return this->_prg[this->curProgram].c_switch ? 1.0f : 0.0f;
+	case pRevSwitch:	return this->_prg[this->curProgram].r_switch ? 1.0f : 0.0f;
 	}
 }
 
@@ -436,6 +446,8 @@ void CO::getParameterName(VstInt32 index, char* text)
 	case pRevWet:	vst_strncpy(text, "RevWet", kVstMaxParamStrLen);	break;
 	case pRevDry:	vst_strncpy(text, "RevDry", kVstMaxParamStrLen);	break;
 	case pOutVol:	vst_strncpy(text, "OutVol", kVstMaxParamStrLen);	break;
+	case pChSwitch:	vst_strncpy(text, "ChSwitch", kVstMaxParamStrLen);	break;
+	case pRevSwitch:	vst_strncpy(text, "RevSwitch", kVstMaxParamStrLen);	break;
 	}
 }
 
@@ -467,12 +479,14 @@ void CO::ReadProgram()
 	this->_Synth->setChorusSpeed(p->c_speed);
 	this->_Synth->setChorusMix(p->c_mix);
 	this->_Synth->setChorusFeedback(p->c_feedback);
+	this->_Synth->setChorusOn(p->c_switch);
 
 	this->_Synth->setRevRoom(p->r_room);
 	this->_Synth->setRevDamp(p->r_damp);
 	this->_Synth->setRevWidth(p->r_width);
 	this->_Synth->setRevWet(p->r_wet);
 	this->_Synth->setRevDry(p->r_dry);
+	this->_Synth->setRevOn(p->r_switch);
 
 	this->_Synth->setOutVol(p->outvol);
 
@@ -649,6 +663,8 @@ void CO::CreateEmptyPrg(PROGRAM* p, int nr)
 	p->r_wet = 16;
 	p->r_dry = 64;
 	p->outvol = 80;
+	p->c_switch = true;
+	p->r_switch = true;
 }
 
 #pragma warning(default: 4996)

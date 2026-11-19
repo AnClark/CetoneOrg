@@ -79,6 +79,16 @@ public:
 		this->PanDepth = (float)val / 127.0f * 0.48f;
 	}
 
+	void setChorusOn(bool on)
+	{
+		// Clear the stale delay line left over from the bypassed period,
+		// so the effect starts from silence when it gets re-enabled.
+		if(on && !this->chorusOn)
+			this->_Chorus->Reset();
+
+		this->chorusOn = on;
+	}
+
 	void setChorusDelayL(int val)
 	{
 		this->_Chorus->setDelayL(val);
@@ -127,6 +137,16 @@ public:
 		float click = v * v * 0.005f + 0.00001f;
 		for(i = 0; i < 89; i++)
 			this->Wheels[i]->setAttack(click);
+	}
+
+	void setRevOn(bool on)
+	{
+		// Clear the stale reverb tails left over from the bypassed period,
+		// so the effect starts from silence when it gets re-enabled.
+		if(on && !this->reverbOn)
+			this->_Reverb->Reset();
+
+		this->reverbOn = on;
 	}
 
 	void setRevDamp(int val)
@@ -192,6 +212,8 @@ private:
 	int iFramePos;
 	int isChorus;
 	int isReverb;
+	bool chorusOn;
+	bool reverbOn;
 	float OutVol;
 	float a1, a2;
 	float b0, b1, b2;
